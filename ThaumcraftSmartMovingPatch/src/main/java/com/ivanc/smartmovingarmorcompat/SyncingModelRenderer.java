@@ -75,7 +75,7 @@ public class SyncingModelRenderer extends ModelRenderer {
     }
 
     private void renderWithSmartRenderTransform(ModelRotationRenderer source, float scale) {
-        RendererTransform originalTransform = RendererTransform.capture(this.original);
+        RendererTransformSnapshot originalTransform = RendererTransformSnapshot.capture(this.original);
         boolean wrapperMatrixPushed = false;
 
         try {
@@ -94,58 +94,6 @@ public class SyncingModelRenderer extends ModelRenderer {
                 GL11.glPopMatrix();
             }
             originalTransform.restore(this.original);
-        }
-    }
-
-    private static final class RendererTransform {
-        private final float rotationPointX;
-        private final float rotationPointY;
-        private final float rotationPointZ;
-        private final float rotateAngleX;
-        private final float rotateAngleY;
-        private final float rotateAngleZ;
-        private final float offsetX;
-        private final float offsetY;
-        private final float offsetZ;
-
-        private RendererTransform(ModelRenderer renderer) {
-            this.rotationPointX = renderer.rotationPointX;
-            this.rotationPointY = renderer.rotationPointY;
-            this.rotationPointZ = renderer.rotationPointZ;
-            this.rotateAngleX = renderer.rotateAngleX;
-            this.rotateAngleY = renderer.rotateAngleY;
-            this.rotateAngleZ = renderer.rotateAngleZ;
-            this.offsetX = renderer.offsetX;
-            this.offsetY = renderer.offsetY;
-            this.offsetZ = renderer.offsetZ;
-        }
-
-        static RendererTransform capture(ModelRenderer renderer) {
-            return new RendererTransform(renderer);
-        }
-
-        void applyIdentity(ModelRenderer renderer) {
-            renderer.rotationPointX = 0.0F;
-            renderer.rotationPointY = 0.0F;
-            renderer.rotationPointZ = 0.0F;
-            renderer.rotateAngleX = 0.0F;
-            renderer.rotateAngleY = 0.0F;
-            renderer.rotateAngleZ = 0.0F;
-            renderer.offsetX = 0.0F;
-            renderer.offsetY = 0.0F;
-            renderer.offsetZ = 0.0F;
-        }
-
-        void restore(ModelRenderer renderer) {
-            renderer.rotationPointX = this.rotationPointX;
-            renderer.rotationPointY = this.rotationPointY;
-            renderer.rotationPointZ = this.rotationPointZ;
-            renderer.rotateAngleX = this.rotateAngleX;
-            renderer.rotateAngleY = this.rotateAngleY;
-            renderer.rotateAngleZ = this.rotateAngleZ;
-            renderer.offsetX = this.offsetX;
-            renderer.offsetY = this.offsetY;
-            renderer.offsetZ = this.offsetZ;
         }
     }
 }

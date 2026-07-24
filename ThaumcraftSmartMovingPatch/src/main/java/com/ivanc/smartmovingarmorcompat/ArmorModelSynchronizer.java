@@ -7,23 +7,31 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 
 public final class ArmorModelSynchronizer {
+    private static final String[] BIPED_HEAD = new String[] {"bipedHead", "field_78116_c"};
+    private static final String[] BIPED_HEADWEAR = new String[] {"bipedHeadwear", "field_78114_d"};
+    private static final String[] BIPED_BODY = new String[] {"bipedBody", "field_78115_e"};
+    private static final String[] BIPED_RIGHT_ARM = new String[] {"bipedRightArm", "field_78112_f"};
+    private static final String[] BIPED_LEFT_ARM = new String[] {"bipedLeftArm", "field_78113_g"};
+    private static final String[] BIPED_RIGHT_LEG = new String[] {"bipedRightLeg", "field_78123_h"};
+    private static final String[] BIPED_LEFT_LEG = new String[] {"bipedLeftLeg", "field_78124_i"};
+
     private static final String[][] BIPED_PARTS = new String[][] {
-        {"bipedHead", "field_78116_c"},
-        {"bipedHeadwear", "field_78114_d"},
-        {"bipedBody", "field_78115_e"},
-        {"bipedRightArm", "field_78112_f"},
-        {"bipedLeftArm", "field_78113_g"},
-        {"bipedRightLeg", "field_78123_h"},
-        {"bipedLeftLeg", "field_78124_i"}
+        BIPED_HEAD,
+        BIPED_HEADWEAR,
+        BIPED_BODY,
+        BIPED_RIGHT_ARM,
+        BIPED_LEFT_ARM,
+        BIPED_RIGHT_LEG,
+        BIPED_LEFT_LEG
     };
 
     private static final String[][][] CUSTOM_PART_FIELDS = new String[][][] {
-        {{"bipedHead", "field_78116_c"}, {"helm", "head"}},
-        {{"bipedBody", "field_78115_e"}, {"body", "torso", "cloakMain", "cloakLeft", "cloakRight", "cape", "cloak"}},
-        {{"bipedRightArm", "field_78112_f"}, {"armR", "armr", "rightArm", "armRight"}},
-        {{"bipedLeftArm", "field_78113_g"}, {"armL", "leftArm", "armLeft"}},
-        {{"bipedRightLeg", "field_78123_h"}, {"legR", "bootR", "rightLeg", "legRight"}},
-        {{"bipedLeftLeg", "field_78124_i"}, {"legL", "bootL", "leftLeg", "legLeft"}}
+        {BIPED_HEAD, new String[] {"helm", "head"}},
+        {BIPED_BODY, new String[] {"body", "torso", "cloakMain", "cloakLeft", "cloakRight", "cape", "cloak"}},
+        {BIPED_RIGHT_ARM, new String[] {"armR", "armr", "rightArm", "armRight"}},
+        {BIPED_LEFT_ARM, new String[] {"armL", "leftArm", "armLeft"}},
+        {BIPED_RIGHT_LEG, new String[] {"legR", "bootR", "rightLeg", "legRight"}},
+        {BIPED_LEFT_LEG, new String[] {"legL", "bootL", "leftLeg", "legLeft"}}
     };
 
     private static final String[][] DIRECT_BODY_PART_FIELDS = new String[][] {
@@ -70,9 +78,9 @@ public final class ArmorModelSynchronizer {
             }
         }
 
-        installDirectPartFields(target, source, DIRECT_BODY_PART_FIELDS, new String[] {"bipedBody", "field_78115_e"});
-        installDirectPartFields(target, source, DIRECT_HEAD_PART_FIELDS, new String[] {"bipedHead", "field_78116_c"});
-        installAllDeclaredDirectPartFields(target, source, DIRECT_BODY_ALL_DECLARED_FIELDS, new String[] {"bipedBody", "field_78115_e"});
+        installDirectPartFields(target, source, DIRECT_BODY_PART_FIELDS, BIPED_BODY);
+        installDirectPartFields(target, source, DIRECT_HEAD_PART_FIELDS, BIPED_HEAD);
+        installAllDeclaredDirectPartFields(target, source, DIRECT_BODY_ALL_DECLARED_FIELDS, BIPED_BODY);
     }
 
     public static void restore(ModelBiped target) {
