@@ -11,7 +11,7 @@ This mod improves compatibility between Smart Moving's custom player renderer an
 
 ## Requirements
 
-This mod requires the [unofficial Smart Moving fork for Minecraft 1.7.10](https://github.com/makamys/SmartMoving), along with its dependencies:
+This mod requires the [unofficial Smart Moving fork for Minecraft 1.7.10](https://github.com/makamys/SmartMoving) (recommended) or [SmartMoving](https://www.curseforge.com/minecraft/mc-mods/smart-moving), along with its dependencies:
 
 * [Minecraft Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.7.10.html)
 * [PlayerAPI](https://github.com/makamys/PlayerAPI)
