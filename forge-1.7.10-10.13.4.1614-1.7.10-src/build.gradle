@@ -1,0 +1,60 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "github"
+            url = "https://github.com/juanmuscaria/maven/raw/master"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:[1.2-1.4.6-SNAPSHOT,)'
+    }
+}
+
+apply plugin: 'forge'
+
+version = "1.0.13"
+group = "com.ivanc.smartmovingarmorcompat"
+archivesBaseName = "SmartMovingArmorCompat"
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_7
+
+minecraft {
+    version = "1.7.10-10.13.4.1614-1.7.10"
+    runDir = "eclipse"
+}
+
+dependencies {
+    compile files('../SourceMods/RenderPlayerAPI-1.7.10-1.4.jar')
+    compile files('../SourceMods/SmartRender-1.7.10-2.1.jar')
+    compile files('../SourceMods/SmartMoving-1.7.10-15.8.2-maka.jar')
+    compile files('../SourceMods/TravellersGear-1.7.10-1.16.6.jar')
+    compile files('../SourceMods/ArmoredArms-v1.3.8-1.7.10-release.jar')
+    compile files('../SourceMods/BaublesExpanded-2.2.0-GTNH.jar')
+    compile files('../SourceMods/Botania r1.8-249.jar')
+    compile files('../SourceMods/adventurebackpack-1.3.13-GTNH.jar')
+    compile files('../SourceMods/EMT-1.6.18.jar')
+    compile files('../SourceMods/TConstruct-1.13.57-GTNH.jar')
+    compile files('../SourceMods/etfuturum-2.6.2.25-GTNH.jar')
+    compile files('../SourceMods/GalaxySpace-1.1.121-GTNH.jar')
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
