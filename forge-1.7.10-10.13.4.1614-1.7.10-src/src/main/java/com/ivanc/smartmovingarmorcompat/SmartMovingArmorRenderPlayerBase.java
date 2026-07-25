@@ -14,6 +14,7 @@ import net.smart.render.SmartRenderModel;
 import org.lwjgl.opengl.GL11;
 
 public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
+    private static final String ADVENTURE_HAT_MODEL = "com.darkona.adventurebackpack.client.models.ModelAdventureHat";
     private static final String HOVER_HARNESS_MODEL = "thaumcraft.client.renderers.models.gear.ModelHoverHarness";
     private static final String SMART_RENDER_BASE = "Smart Render";
 
@@ -102,6 +103,11 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
             return;
         }
 
+        if (isAdventureHatModel(target)) {
+            this.renderPlayerAPI.setRenderPassModelField(wrapAdventureHat(target, source));
+            return;
+        }
+
         if (isHoverHarnessModel(target)) {
             this.renderPlayerAPI.setRenderPassModelField(wrapHoverHarness(target, source));
             return;
@@ -111,7 +117,9 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
     }
 
     private void restoreRenderPassModel(ModelBase renderPassModel) {
-        if (renderPassModel instanceof HoverHarnessModelWrapper) {
+        if (renderPassModel instanceof AdventureHatModelWrapper) {
+            this.renderPlayerAPI.setRenderPassModelField(((AdventureHatModelWrapper) renderPassModel).getOriginal());
+        } else if (renderPassModel instanceof HoverHarnessModelWrapper) {
             ModelBiped original = ((HoverHarnessModelWrapper) renderPassModel).getOriginal();
             ArmorModelSynchronizer.restore(original);
             this.renderPlayerAPI.setRenderPassModelField(original);
@@ -120,8 +128,20 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
         }
     }
 
+    private static boolean isAdventureHatModel(ModelBiped model) {
+        return ADVENTURE_HAT_MODEL.equals(model.getClass().getName());
+    }
+
     private static boolean isHoverHarnessModel(ModelBiped model) {
         return HOVER_HARNESS_MODEL.equals(model.getClass().getName());
+    }
+
+    private static ModelBiped wrapAdventureHat(ModelBiped target, ModelBiped source) {
+        if (target instanceof AdventureHatModelWrapper) {
+            ((AdventureHatModelWrapper) target).setSourceModel(source);
+            return target;
+        }
+        return new AdventureHatModelWrapper(target, source);
     }
 
     private static ModelBiped wrapHoverHarness(ModelBiped target, ModelBiped source) {

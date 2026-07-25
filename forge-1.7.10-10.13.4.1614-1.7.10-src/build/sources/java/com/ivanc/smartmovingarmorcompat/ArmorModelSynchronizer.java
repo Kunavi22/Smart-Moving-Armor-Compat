@@ -37,7 +37,8 @@ public final class ArmorModelSynchronizer {
     private static final String[][] DIRECT_BODY_PART_FIELDS = new String[][] {
         {"emt.client.model.ModelWings", "rightWing", "leftWing", "center"},
         {"emt.client.model.ModelSpecialArmor", "rightWing", "leftWing", "center", "jetpack"},
-        {"tconstruct.armor.model.WingModel", "WingBaseRight", "WingBaseLeft"}
+        {"tconstruct.armor.model.WingModel", "WingBaseRight", "WingBaseLeft"},
+        {"com.emoniph.witchery.client.model.ModelVampireArmor", "chest"}
     };
 
     private static final String[][] DIRECT_HEAD_PART_FIELDS = new String[][] {

@@ -43,6 +43,11 @@ public final class ClientRenderHookRegistrar {
             MinecraftForge.EVENT_BUS.register(new AdventureBackpackTransformHandler());
         }
 
+        if (Loader.isModLoaded("Backpack") && BackpackTransformHandler.isRenderingEnabled()) {
+            BackpackTransformHandler.unregisterOriginalHandlers();
+            MinecraftForge.EVENT_BUS.register(new BackpackTransformHandler());
+        }
+
         if (Loader.isModLoaded("etfuturum")) {
             EtFuturumElytraTransformHandler.unregisterOriginalHandlers();
             MinecraftForge.EVENT_BUS.register(new EtFuturumElytraTransformHandler());
