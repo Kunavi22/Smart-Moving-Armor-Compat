@@ -34,6 +34,8 @@ The following mods and equipment have been tested or are expected to work:
   * Baubles
 
 * **Traveler's Gear**
+* Armor stand
+* Equipment
 
 * **Witching Gadgets**
 
@@ -76,7 +78,7 @@ The following mods and equipment have been tested or are expected to work:
   * Backpacks
   * Jetpack
   * Copter
-  * The Adventurer's Fedora still behaves incorrectly
+  * Adventurer's Fedora
 
 * **Electro-Magic Tools**
 
@@ -93,11 +95,10 @@ The following mods and equipment have been tested or are expected to work:
 * **GalaxySpace**
 
   * Electric Jetpack
+ 
+* **Backpack Edited for ModdedNetwork (GTNH)**
 
-## Known Issues
-
-* The **Adventurer's Fedora** from Adventure Backpack may still render or behave incorrectly.
-* Some untested custom equipment may have minor rendering problems.
+  * Backpack
 
 ## Reporting Compatibility Issues
 
