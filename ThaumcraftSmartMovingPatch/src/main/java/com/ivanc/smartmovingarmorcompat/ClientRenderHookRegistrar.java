@@ -1,10 +1,15 @@
 package com.ivanc.smartmovingarmorcompat;
 
+import api.player.model.ModelPlayerAPI;
+import api.player.model.ModelPlayerBaseSorting;
 import api.player.render.RenderPlayerAPI;
 import cpw.mods.fml.common.Loader;
 import net.minecraftforge.common.MinecraftForge;
 
 public final class ClientRenderHookRegistrar {
+    private static final String SMART_MOVING_BASE = "Smart Moving";
+    private static final String SMART_RENDER_BASE = "Smart Render";
+
     private static boolean registered;
 
     private ClientRenderHookRegistrar() {
@@ -16,8 +21,18 @@ public final class ClientRenderHookRegistrar {
         }
 
         RenderPlayerAPI.register(SmartMovingArmorCompat.MODID, SmartMovingArmorRenderPlayerBase.class);
+        registerModelHooks();
         registerOptionalForgeHandlers();
         registered = true;
+    }
+
+    private static void registerModelHooks() {
+        ModelPlayerBaseSorting sorting = new ModelPlayerBaseSorting();
+        sorting.setAfterSetRotationAnglesInferiors(new String[] {SMART_RENDER_BASE, SMART_MOVING_BASE});
+        ModelPlayerAPI.register(
+            SmartMovingArmorCompat.MODID + ".model",
+            SmartMovingArmorModelPlayerBase.class,
+            sorting);
     }
 
     private static void registerOptionalForgeHandlers() {
