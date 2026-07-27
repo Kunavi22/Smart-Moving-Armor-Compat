@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0.19"
+version = "1.0.24"
 group = "com.ivanc.smartmovingarmorcompat"
 archivesBaseName = "SmartMovingArmorCompat"
 
@@ -38,18 +38,25 @@ dependencies {
     compile files('../SourceMods/TConstruct-1.13.57-GTNH.jar')
     compile files('../SourceMods/etfuturum-2.6.2.25-GTNH.jar')
     compile files('../SourceMods/GalaxySpace-1.1.121-GTNH.jar')
+    compile files('../SourceMods/HBM-NTM-[1.0.27_X5687].jar')
 }
 
-processResources {
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
+    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-        expand "version": project.version, "mcversion": project.minecraft.version
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-
+        
+    // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
+        exclude 'mcmod.info'
     }
 }

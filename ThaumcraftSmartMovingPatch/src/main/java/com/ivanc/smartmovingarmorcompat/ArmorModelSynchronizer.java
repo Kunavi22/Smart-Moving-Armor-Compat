@@ -49,6 +49,14 @@ public final class ArmorModelSynchronizer {
         "galaxyspace.core.model.ModelJetPack"
     };
 
+    private static final String[] DIRECT_BODY_ALL_SMART_FIELDS = new String[] {
+        "com.hbm.render.model.ModelJetPack"
+    };
+
+    private static final String[] DIRECT_HEAD_ALL_SMART_FIELDS = new String[] {
+        "com.hbm.render.model.ModelM65"
+    };
+
     private static final String[][] MODEL_STATE = new String[][] {
         {"heldItemLeft", "field_78119_l"},
         {"heldItemRight", "field_78120_m"},
@@ -82,6 +90,8 @@ public final class ArmorModelSynchronizer {
         installDirectPartFields(target, source, DIRECT_BODY_PART_FIELDS, BIPED_BODY);
         installDirectPartFields(target, source, DIRECT_HEAD_PART_FIELDS, BIPED_HEAD);
         installAllDeclaredDirectPartFields(target, source, DIRECT_BODY_ALL_DECLARED_FIELDS, BIPED_BODY);
+        installAllDeclaredSmartPartFields(target, source, DIRECT_BODY_ALL_SMART_FIELDS, BIPED_BODY);
+        installAllDeclaredSmartPartFields(target, source, DIRECT_HEAD_ALL_SMART_FIELDS, BIPED_HEAD);
     }
 
     public static void restore(ModelBiped target) {
@@ -103,6 +113,8 @@ public final class ArmorModelSynchronizer {
         restoreDirectPartFields(target, DIRECT_BODY_PART_FIELDS);
         restoreDirectPartFields(target, DIRECT_HEAD_PART_FIELDS);
         restoreAllDeclaredDirectPartFields(target, DIRECT_BODY_ALL_DECLARED_FIELDS);
+        restoreAllDeclaredDirectPartFields(target, DIRECT_BODY_ALL_SMART_FIELDS);
+        restoreAllDeclaredDirectPartFields(target, DIRECT_HEAD_ALL_SMART_FIELDS);
 
         resetVanillaState(target);
     }
@@ -184,6 +196,24 @@ public final class ArmorModelSynchronizer {
         ModelBiped source,
         String[] classNames,
         String[] sourcePartNames) {
+        installAllDeclaredPartFields(target, source, classNames, sourcePartNames, false, true);
+    }
+
+    private static void installAllDeclaredSmartPartFields(
+        ModelBiped target,
+        ModelBiped source,
+        String[] classNames,
+        String[] sourcePartNames) {
+        installAllDeclaredPartFields(target, source, classNames, sourcePartNames, true, false);
+    }
+
+    private static void installAllDeclaredPartFields(
+        ModelBiped target,
+        ModelBiped source,
+        String[] classNames,
+        String[] sourcePartNames,
+        boolean copyAnglesFromSource,
+        boolean preserveLocalTransform) {
         if (!isTargetClass(target, classNames)) {
             return;
         }
@@ -193,7 +223,13 @@ public final class ArmorModelSynchronizer {
             Field[] fields = current.getDeclaredFields();
             for (int i = 0; i < fields.length; i++) {
                 if (ModelRenderer.class.isAssignableFrom(fields[i].getType())) {
-                    installProxy(target, source, sourcePartNames, new String[] {fields[i].getName()}, false, true);
+                    installProxy(
+                        target,
+                        source,
+                        sourcePartNames,
+                        new String[] {fields[i].getName()},
+                        copyAnglesFromSource,
+                        preserveLocalTransform);
                 }
             }
             current = current.getSuperclass();

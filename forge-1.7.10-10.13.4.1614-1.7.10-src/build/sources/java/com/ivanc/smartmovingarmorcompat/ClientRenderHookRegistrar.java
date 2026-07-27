@@ -52,5 +52,9 @@ public final class ClientRenderHookRegistrar {
             EtFuturumElytraTransformHandler.unregisterOriginalHandlers();
             MinecraftForge.EVENT_BUS.register(new EtFuturumElytraTransformHandler());
         }
+
+        if (Loader.isModLoaded("hbm")) {
+            MinecraftForge.EVENT_BUS.register(new HbmArmorModTransformHandler());
+        }
     }
 }
