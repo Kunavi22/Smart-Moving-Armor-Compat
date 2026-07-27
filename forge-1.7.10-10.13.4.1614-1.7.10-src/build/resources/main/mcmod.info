@@ -3,7 +3,7 @@
     "modid": "smartmovingarmorcompat",
     "name": "Smart Moving Armor Compat",
     "description": "Makes custom ModelBiped armor renderers follow Smart Moving player animations through RenderPlayerAPI.",
-    "version": "1.0.24",
+    "version": "1.0.26",
     "mcversion": "1.7.10",
     "url": "",
     "authorList": ["ivanc"],
