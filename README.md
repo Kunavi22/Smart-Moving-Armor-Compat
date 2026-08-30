@@ -34,8 +34,8 @@ The following mods and equipment have been tested or are expected to work:
   * Baubles
 
 * **Traveler's Gear**
-* Armor stand
-* Equipment
+  * Armor stand
+  * Equipment
 
 * **Witching Gadgets**
 
