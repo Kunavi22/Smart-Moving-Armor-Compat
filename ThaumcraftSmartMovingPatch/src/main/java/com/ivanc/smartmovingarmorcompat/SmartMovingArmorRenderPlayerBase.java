@@ -33,10 +33,19 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
         float netHeadYaw,
         float headPitch,
         float scale) {
-        if (entity instanceof EntityPlayer && EtFuturumElytraCompat.isElytraFlying((EntityPlayer) entity)) {
-            suppressSmartMovingFallingAnimation((EntityPlayer) entity);
-            super.renderModel(entity, limbSwing, 0.0F, ageInTicks, netHeadYaw, headPitch, scale);
-            return;
+        if (entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entity;
+            if (EtFuturumElytraCompat.isElytraFlying(player)) {
+                suppressSmartMovingFallingAnimation(player);
+                super.renderModel(entity, limbSwing, 0.0F, ageInTicks, netHeadYaw, headPitch, scale);
+                return;
+            }
+
+            if (OpenBlocksGliderCompat.isGliderDeployed(player)) {
+                OpenBlocksGliderCompat.suppressWalkCycle(player);
+                super.renderModel(entity, 0.0F, 0.0F, ageInTicks, netHeadYaw, headPitch, scale);
+                return;
+            }
         }
 
         super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
@@ -44,11 +53,20 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
 
     @Override
     public void rotatePlayer(AbstractClientPlayer player, float ageInTicks, float rotationYaw, float partialTicks) {
-        if (!EtFuturumElytraCompat.isElytraFlying(player)) {
-            super.rotatePlayer(player, ageInTicks, rotationYaw, partialTicks);
+        if (EtFuturumElytraCompat.isElytraFlying(player)) {
+            rotateElytraPlayer(player, ageInTicks, rotationYaw, partialTicks);
             return;
         }
 
+        if (OpenBlocksGliderCompat.isGliderDeployed(player)) {
+            rotateOpenBlocksGliderPlayer(player, ageInTicks, rotationYaw, partialTicks);
+            return;
+        }
+
+        super.rotatePlayer(player, ageInTicks, rotationYaw, partialTicks);
+    }
+
+    private void rotateElytraPlayer(AbstractClientPlayer player, float ageInTicks, float rotationYaw, float partialTicks) {
         GL11.glPushMatrix();
         super.rotatePlayer(player, ageInTicks, rotationYaw, partialTicks);
         GL11.glPopMatrix();
@@ -61,6 +79,18 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
         GL11.glRotatef(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(glidePitch, 1.0F, 0.0F, 0.0F);
         GL11.glRotatef(getElytraBankAngle(player, partialTicks), 0.0F, 1.0F, 0.0F);
+    }
+
+    private void rotateOpenBlocksGliderPlayer(AbstractClientPlayer player, float ageInTicks, float rotationYaw, float partialTicks) {
+        OpenBlocksGliderCompat.suppressWalkCycle(player);
+
+        GL11.glPushMatrix();
+        super.rotatePlayer(player, ageInTicks, rotationYaw, partialTicks);
+        GL11.glPopMatrix();
+        clearSmartRenderBodyYaw();
+
+        GL11.glRotatef(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(75.0F, -1.0F, 0.0F, 0.0F);
     }
 
     private void suppressSmartMovingFallingAnimation(EntityPlayer player) {

@@ -71,5 +71,14 @@ public final class ClientRenderHookRegistrar {
         if (Loader.isModLoaded("hbm")) {
             MinecraftForge.EVENT_BUS.register(new HbmArmorModTransformHandler());
         }
+
+        if (Loader.isModLoaded("OpenBlocks")) {
+            OpenBlocksGliderCompat.unregisterOriginalHandlers();
+        }
+
+        if (Loader.isModLoaded("betterstorage")) {
+            BetterStorageBackpackTransformHandler.unregisterOriginalHandlers();
+            MinecraftForge.EVENT_BUS.register(new BetterStorageBackpackTransformHandler());
+        }
     }
 }
