@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0.28"
+version = "1.0.30"
 group = "com.ivanc.smartmovingarmorcompat"
 archivesBaseName = "SmartMovingArmorCompat"
 
@@ -37,7 +37,8 @@ dependencies {
     compile files('../SourceMods/EMT-1.6.18.jar')
     compile files('../SourceMods/TConstruct-1.13.57-GTNH.jar')
     compile files('../SourceMods/etfuturum-2.6.2.25-GTNH.jar')
-    compile files('../SourceMods/GalaxySpace-1.1.121-GTNH.jar')
+    compile files('../SourceMods/GalaxySpace-1.7.10-1.2.15.jar')
+    compile files('../SourceMods/Mekanism-1.7.10-9.1.1.1031.jar')
     compile files('../SourceMods/HBM-NTM-[1.0.27_X5687].jar')
     compile files('../SourceMods/BetterStorage-1.7.10-0.13.1.128.jar')
 }

@@ -188,6 +188,16 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
             return;
         }
 
+        if (target instanceof MekanismArmorModelWrapper) {
+            ((MekanismArmorModelWrapper) target).setSourceModel(source);
+            return;
+        }
+
+        if (target instanceof GalaxySpaceArmorModelWrapper) {
+            ((GalaxySpaceArmorModelWrapper) target).setSourceModel(source);
+            return;
+        }
+
         if (isAdventureHatModel(target)) {
             this.renderPlayerAPI.setRenderPassModelField(wrapAdventureHat(target, source));
             return;
@@ -200,6 +210,16 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
 
         if (HbmArmorModelWrapper.isHbmArmorModel(target)) {
             this.renderPlayerAPI.setRenderPassModelField(new HbmArmorModelWrapper(target, source));
+            return;
+        }
+
+        if (MekanismArmorModelWrapper.isMekanismArmorModel(target)) {
+            this.renderPlayerAPI.setRenderPassModelField(new MekanismArmorModelWrapper(target, source));
+            return;
+        }
+
+        if (GalaxySpaceArmorModelWrapper.isGalaxySpaceArmorModel(target)) {
+            this.renderPlayerAPI.setRenderPassModelField(new GalaxySpaceArmorModelWrapper(target, source));
             return;
         }
 
@@ -217,6 +237,12 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
             ModelBiped original = ((HbmArmorModelWrapper) renderPassModel).getOriginal();
             HbmArmorModelWrapper.restoreHbmPartProxies(original);
             this.renderPlayerAPI.setRenderPassModelField(original);
+        } else if (renderPassModel instanceof MekanismArmorModelWrapper) {
+            this.renderPlayerAPI.setRenderPassModelField(
+                ((MekanismArmorModelWrapper) renderPassModel).getOriginal());
+        } else if (renderPassModel instanceof GalaxySpaceArmorModelWrapper) {
+            this.renderPlayerAPI.setRenderPassModelField(
+                ((GalaxySpaceArmorModelWrapper) renderPassModel).getOriginal());
         } else if (renderPassModel instanceof ModelBiped) {
             HbmArmorModelWrapper.restoreHbmPartProxies((ModelBiped) renderPassModel);
             ArmorModelSynchronizer.restore((ModelBiped) renderPassModel);

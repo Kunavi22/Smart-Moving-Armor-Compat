@@ -94,7 +94,14 @@ The following mods and equipment have been tested or are expected to work:
 
 * **GalaxySpace**
 
+  * Space Suit
   * Electric Jetpack
+
+* **Mekanism**
+
+  * Jetpack and Armored Jetpack
+  * Gas Mask and Scuba Tank
+  * Free Runners
  
 * **Backpack Edited for ModdedNetwork (GTNH)**
 

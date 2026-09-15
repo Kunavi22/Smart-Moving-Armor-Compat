@@ -6,6 +6,8 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.smart.render.ModelRotationRenderer;
+import net.smart.render.SmartRenderModel;
+import net.smart.render.SmartRenderRender;
 import org.lwjgl.opengl.GL11;
 
 public final class SmartRenderTransformHelper {
@@ -36,6 +38,17 @@ public final class SmartRenderTransformHelper {
         return player.getClass().getName().startsWith("net.minecraft.client.entity.");
     }
 
+    public static ModelBiped getActiveSmartModel(ModelBiped fallback) {
+        try {
+            SmartRenderModel active = SmartRenderRender.CurrentMainModel;
+            if (active != null && active.mp != null) {
+                return active.mp;
+            }
+        } catch (Throwable ignored) {
+        }
+        return fallback;
+    }
+
     public static Transform begin(ModelBiped sourceModel, String[] partNames) {
         ModelRenderer source = ArmorModelSynchronizer.getPart(sourceModel, partNames);
         if (!(source instanceof ModelRotationRenderer)) {
@@ -43,6 +56,10 @@ public final class SmartRenderTransformHelper {
         }
 
         return new Transform((ModelRotationRenderer) source);
+    }
+
+    public static boolean canTransform(ModelBiped sourceModel, String[] partNames) {
+        return ArmorModelSynchronizer.getPart(sourceModel, partNames) instanceof ModelRotationRenderer;
     }
 
     public static final class Transform {
