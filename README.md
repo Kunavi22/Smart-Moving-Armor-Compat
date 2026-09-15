@@ -69,7 +69,7 @@ The following mods and equipment have been tested or are expected to work:
 
   * Enderman Head
 
-* **Galacticraft**
+* **Galacticraft (GTNH fork)**
 
   * All armor sets
 
