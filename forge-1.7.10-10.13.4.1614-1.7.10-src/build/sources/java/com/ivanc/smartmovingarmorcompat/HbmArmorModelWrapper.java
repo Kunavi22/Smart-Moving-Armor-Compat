@@ -48,7 +48,7 @@ public class HbmArmorModelWrapper extends ModelBiped {
     private static Method proxyOriginalMethod;
 
     private final ModelBiped original;
-    private final ModelBiped poseModel = new ModelBiped(0.0F);
+    private final ModelBiped poseModel = VanillaModelFactory.createBiped(0.0F);
     private ModelBiped sourceModel;
 
     public HbmArmorModelWrapper(ModelBiped original, ModelBiped sourceModel) {
@@ -193,7 +193,7 @@ public class HbmArmorModelWrapper extends ModelBiped {
             return null;
         }
 
-        ModelBiped poseModel = new ModelBiped(0.0F);
+        ModelBiped poseModel = VanillaModelFactory.createBiped(0.0F);
         updatePoseModel(sourceModel, poseModel, null);
         return new SmartRenderContext((IRenderPlayer) render, poseModel);
     }
