@@ -107,6 +107,10 @@ The following mods and equipment have been tested or are expected to work:
 
   * Backpack
 
+* **Icarus**
+
+  * All wings
+
 ## Reporting Compatibility Issues
 
 When reporting an issue, please include:

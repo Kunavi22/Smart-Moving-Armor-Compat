@@ -80,5 +80,10 @@ public final class ClientRenderHookRegistrar {
             BetterStorageBackpackTransformHandler.unregisterOriginalHandlers();
             MinecraftForge.EVENT_BUS.register(new BetterStorageBackpackTransformHandler());
         }
+
+        if (Loader.isModLoaded("TIcarus")) {
+            IcarusWingTransformHandler.unregisterOriginalHandlers();
+            MinecraftForge.EVENT_BUS.register(new IcarusWingTransformHandler());
+        }
     }
 }

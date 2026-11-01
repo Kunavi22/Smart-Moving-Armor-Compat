@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0.32"
+version = "1.0.33"
 group = "com.ivanc.smartmovingarmorcompat"
 archivesBaseName = "SmartMovingArmorCompat"
 
@@ -41,6 +41,7 @@ dependencies {
     compile files('../SourceMods/Mekanism-1.7.10-9.1.1.1031.jar')
     compile files('../SourceMods/HBM-NTM-[1.0.27_X5687].jar')
     compile files('../SourceMods/BetterStorage-1.7.10-0.13.1.128.jar')
+    compile files('../SourceMods/Icarus-1.0.6-hotfix.jar')
 }
 
 processResources
