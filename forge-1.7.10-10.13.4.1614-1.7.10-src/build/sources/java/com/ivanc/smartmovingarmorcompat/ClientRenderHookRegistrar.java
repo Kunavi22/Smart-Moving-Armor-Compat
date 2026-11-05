@@ -85,5 +85,10 @@ public final class ClientRenderHookRegistrar {
             IcarusWingTransformHandler.unregisterOriginalHandlers();
             MinecraftForge.EVENT_BUS.register(new IcarusWingTransformHandler());
         }
+
+        if (Loader.isModLoaded("alfheim") && Loader.isModLoaded("TravellersGear")) {
+            AlfheimCapeTransformHandler.unregisterOriginalHandlers();
+            MinecraftForge.EVENT_BUS.register(new AlfheimCapeTransformHandler());
+        }
     }
 }

@@ -49,7 +49,8 @@ public class BotaniaBaubleTransformHandler {
             return;
         }
 
-        ModelBiped source = SmartRenderTransformHelper.getSmartModel(event.renderer);
+        ModelBiped source = SmartRenderTransformHelper.getActiveSmartModel(
+            SmartRenderTransformHelper.getSmartModel(event.renderer));
         if (source == null) {
             return;
         }
