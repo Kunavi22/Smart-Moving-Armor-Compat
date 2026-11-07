@@ -14,6 +14,7 @@ public final class SmartRenderTransformHelper {
     public static final float MODEL_SCALE = 0.0625F;
     public static final String[] HEAD_PART = new String[] {"bipedHead", "field_78116_c"};
     public static final String[] BODY_PART = new String[] {"bipedBody", "field_78115_e"};
+    public static final String[] LEFT_ARM_PART = new String[] {"bipedLeftArm", "field_78113_g"};
 
     private SmartRenderTransformHelper() {
     }

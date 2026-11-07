@@ -57,6 +57,11 @@ public final class ArmorModelSynchronizer {
         "com.hbm.render.model.ModelM65"
     };
 
+    private static final String[] DIRECT_HEAD_ALL_FIXED_FIELDS = new String[] {
+        "mariculture.fishery.render.ModelFishingHat",
+        "xreliquary.client.model.ModelWitchHat"
+    };
+
     private static final String[][] MODEL_STATE = new String[][] {
         {"heldItemLeft", "field_78119_l"},
         {"heldItemRight", "field_78120_m"},
@@ -92,6 +97,7 @@ public final class ArmorModelSynchronizer {
         installAllDeclaredDirectPartFields(target, source, DIRECT_BODY_ALL_DECLARED_FIELDS, BIPED_BODY);
         installAllDeclaredSmartPartFields(target, source, DIRECT_BODY_ALL_SMART_FIELDS, BIPED_BODY);
         installAllDeclaredSmartPartFields(target, source, DIRECT_HEAD_ALL_SMART_FIELDS, BIPED_HEAD);
+        installAllDeclaredFixedPartFields(target, source, DIRECT_HEAD_ALL_FIXED_FIELDS, BIPED_HEAD);
     }
 
     public static void restore(ModelBiped target) {
@@ -115,11 +121,15 @@ public final class ArmorModelSynchronizer {
         restoreAllDeclaredDirectPartFields(target, DIRECT_BODY_ALL_DECLARED_FIELDS);
         restoreAllDeclaredDirectPartFields(target, DIRECT_BODY_ALL_SMART_FIELDS);
         restoreAllDeclaredDirectPartFields(target, DIRECT_HEAD_ALL_SMART_FIELDS);
+        restoreAllDeclaredDirectPartFields(target, DIRECT_HEAD_ALL_FIXED_FIELDS);
 
         resetVanillaState(target);
     }
 
     static ModelRenderer getPart(ModelBiped model, String[] names) {
+        if (model == null) {
+            return null;
+        }
         Object value = get(model, names);
         return value instanceof ModelRenderer ? (ModelRenderer) value : null;
     }
@@ -207,6 +217,46 @@ public final class ArmorModelSynchronizer {
         installAllDeclaredPartFields(target, source, classNames, sourcePartNames, true, false);
     }
 
+    private static void installAllDeclaredFixedPartFields(
+        ModelBiped target,
+        ModelBiped source,
+        String[] classNames,
+        String[] sourcePartNames) {
+        if (!isTargetClass(target, classNames)) {
+            return;
+        }
+
+        Class<?> current = target.getClass();
+        while (current != null && current != ModelBiped.class) {
+            Field[] fields = current.getDeclaredFields();
+            for (int i = 0; i < fields.length; i++) {
+                if (ModelRenderer.class.isAssignableFrom(fields[i].getType())) {
+                    installFixedProxy(target, source, sourcePartNames, new String[] {fields[i].getName()});
+                }
+            }
+            current = current.getSuperclass();
+        }
+    }
+
+    private static void installFixedProxy(
+        ModelBiped target,
+        ModelBiped source,
+        String[] sourcePartNames,
+        String[] targetPartNames) {
+        ModelRenderer current = getPart(target, targetPartNames);
+        if (current == null) {
+            return;
+        }
+
+        if (current instanceof FixedTransformModelRenderer) {
+            ((FixedTransformModelRenderer) current).setSource(source);
+            return;
+        }
+
+        set(target, targetPartNames,
+            new FixedTransformModelRenderer(target, source, sourcePartNames, current));
+    }
+
     private static void installAllDeclaredPartFields(
         ModelBiped target,
         ModelBiped source,
@@ -240,6 +290,8 @@ public final class ArmorModelSynchronizer {
         ModelRenderer current = getPart(target, partNames);
         if (current instanceof SyncingModelRenderer) {
             set(target, partNames, ((SyncingModelRenderer) current).getOriginal());
+        } else if (current instanceof FixedTransformModelRenderer) {
+            set(target, partNames, ((FixedTransformModelRenderer) current).getOriginal());
         }
     }
 

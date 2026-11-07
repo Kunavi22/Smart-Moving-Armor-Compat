@@ -90,5 +90,9 @@ public final class ClientRenderHookRegistrar {
             AlfheimCapeTransformHandler.unregisterOriginalHandlers();
             MinecraftForge.EVENT_BUS.register(new AlfheimCapeTransformHandler());
         }
+
+        if (Loader.isModLoaded("battlegear2")) {
+            BattlegearTransformHandler.register();
+        }
     }
 }

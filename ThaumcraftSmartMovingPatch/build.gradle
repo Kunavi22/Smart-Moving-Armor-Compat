@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0.36"
+version = "1.0.38"
 group = "com.ivanc.smartmovingarmorcompat"
 archivesBaseName = "SmartMovingArmorCompat"
 
@@ -42,6 +42,7 @@ dependencies {
     compile files('../SourceMods/HBM-NTM-[1.0.27_X5687].jar')
     compile files('../SourceMods/BetterStorage-1.7.10-0.13.1.128.jar')
     compile files('../SourceMods/Icarus-1.0.6-hotfix.jar')
+    compile files('../SourceMods/1.7.10-MB_Battlegear2-Bullseye-1.3.0.jar')
 }
 
 processResources

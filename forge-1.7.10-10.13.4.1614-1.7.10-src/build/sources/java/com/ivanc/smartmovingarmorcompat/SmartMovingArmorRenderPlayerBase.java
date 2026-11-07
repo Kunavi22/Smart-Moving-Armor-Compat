@@ -203,6 +203,11 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
             return;
         }
 
+        if (target instanceof BodyRootModelWrapper) {
+            ((BodyRootModelWrapper) target).setSourceModel(source);
+            return;
+        }
+
         if (isAdventureHatModel(target)) {
             this.renderPlayerAPI.setRenderPassModelField(wrapAdventureHat(target, source));
             return;
@@ -210,6 +215,11 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
 
         if (isHoverHarnessModel(target)) {
             this.renderPlayerAPI.setRenderPassModelField(wrapHoverHarness(target, source));
+            return;
+        }
+
+        if (BodyRootModelWrapper.supports(target)) {
+            this.renderPlayerAPI.setRenderPassModelField(new BodyRootModelWrapper(target, source));
             return;
         }
 
@@ -256,6 +266,9 @@ public class SmartMovingArmorRenderPlayerBase extends RenderPlayerBase {
         } else if (renderPassModel instanceof AlfheimArmorModelWrapper) {
             this.renderPlayerAPI.setRenderPassModelField(
                 ((AlfheimArmorModelWrapper) renderPassModel).getOriginal());
+        } else if (renderPassModel instanceof BodyRootModelWrapper) {
+            this.renderPlayerAPI.setRenderPassModelField(
+                ((BodyRootModelWrapper) renderPassModel).getOriginal());
         } else if (renderPassModel instanceof ModelBiped) {
             HbmArmorModelWrapper.restoreHbmPartProxies((ModelBiped) renderPassModel);
             ArmorModelSynchronizer.restore((ModelBiped) renderPassModel);
