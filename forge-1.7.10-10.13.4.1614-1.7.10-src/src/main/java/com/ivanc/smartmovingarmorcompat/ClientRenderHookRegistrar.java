@@ -94,5 +94,10 @@ public final class ClientRenderHookRegistrar {
         if (Loader.isModLoaded("battlegear2")) {
             BattlegearTransformHandler.register();
         }
+
+        if (Loader.isModLoaded("okbackpack")) {
+            OkBackpackTransformHandler.unregisterOriginalHandlers();
+            MinecraftForge.EVENT_BUS.register(new OkBackpackTransformHandler());
+        }
     }
 }
