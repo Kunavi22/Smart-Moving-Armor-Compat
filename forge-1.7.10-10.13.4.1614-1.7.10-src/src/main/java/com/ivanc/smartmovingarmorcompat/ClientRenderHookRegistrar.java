@@ -99,5 +99,10 @@ public final class ClientRenderHookRegistrar {
             OkBackpackTransformHandler.unregisterOriginalHandlers();
             MinecraftForge.EVENT_BUS.register(new OkBackpackTransformHandler());
         }
+
+        if (Loader.isModLoaded("BackTools")) {
+            BackToolsTransformHandler.unregisterOriginalHandlers();
+            MinecraftForge.EVENT_BUS.register(new BackToolsTransformHandler());
+        }
     }
 }

@@ -7,6 +7,9 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 
 public final class ArmorModelSynchronizer {
+    private static final String MARICULTURE_FLIPPERS = "maritech.model.ModelFlippers";
+    private static final String ARS_MAGICA_EARTH_ARMOR = "am2.models.ModelEarthGuardianChest";
+    private static final String AVARITIA_INFINITY_ARMOR = "fox.spiteful.avaritia.render.ModelArmorInfinity";
     private static final String[] BIPED_HEAD = new String[] {"bipedHead", "field_78116_c"};
     private static final String[] BIPED_HEADWEAR = new String[] {"bipedHeadwear", "field_78114_d"};
     private static final String[] BIPED_BODY = new String[] {"bipedBody", "field_78115_e"};
@@ -59,7 +62,8 @@ public final class ArmorModelSynchronizer {
 
     private static final String[] DIRECT_HEAD_ALL_FIXED_FIELDS = new String[] {
         "mariculture.fishery.render.ModelFishingHat",
-        "xreliquary.client.model.ModelWitchHat"
+        "xreliquary.client.model.ModelWitchHat",
+        "thebetweenlands.client.model.item.ModelExplorersHat"
     };
 
     private static final String[][] MODEL_STATE = new String[][] {
@@ -80,6 +84,10 @@ public final class ArmorModelSynchronizer {
     public static void prepare(ModelBiped target, ModelBiped source) {
         copyModelState(source, target);
 
+        if (prepareRelativeModel(target, source)) {
+            return;
+        }
+
         for (int i = 0; i < BIPED_PARTS.length; i++) {
             installProxy(target, source, BIPED_PARTS[i]);
         }
@@ -98,12 +106,20 @@ public final class ArmorModelSynchronizer {
         installAllDeclaredSmartPartFields(target, source, DIRECT_BODY_ALL_SMART_FIELDS, BIPED_BODY);
         installAllDeclaredSmartPartFields(target, source, DIRECT_HEAD_ALL_SMART_FIELDS, BIPED_HEAD);
         installAllDeclaredFixedPartFields(target, source, DIRECT_HEAD_ALL_FIXED_FIELDS, BIPED_HEAD);
+        prepareNestedModels(target, source);
     }
 
     public static void restore(ModelBiped target) {
         if (target == null) {
             return;
         }
+
+        if (restoreRelativeModel(target)) {
+            resetModelState(target);
+            return;
+        }
+
+        restoreNestedModels(target);
 
         for (int i = 0; i < BIPED_PARTS.length; i++) {
             restoreProxy(target, BIPED_PARTS[i]);
@@ -257,6 +273,176 @@ public final class ArmorModelSynchronizer {
             new FixedTransformModelRenderer(target, source, sourcePartNames, current));
     }
 
+    private static void installRelativeProxy(
+        ModelBiped target,
+        ModelBiped source,
+        String[] sourcePartNames,
+        String targetPartName,
+        float neutralPivotX,
+        float neutralPivotY,
+        float neutralPivotZ) {
+        installRelativeProxy(
+            target,
+            source,
+            sourcePartNames,
+            new String[] {targetPartName},
+            neutralPivotX,
+            neutralPivotY,
+            neutralPivotZ);
+    }
+
+    private static void installRelativeProxy(
+        ModelBiped target,
+        ModelBiped source,
+        String[] sourcePartNames,
+        String[] targetPartNames,
+        float neutralPivotX,
+        float neutralPivotY,
+        float neutralPivotZ) {
+        installRelativeProxy(
+            target,
+            source,
+            sourcePartNames,
+            targetPartNames,
+            neutralPivotX,
+            neutralPivotY,
+            neutralPivotZ,
+            1.0F,
+            1.0F,
+            1.0F,
+            0.0F,
+            0.0F,
+            0.0F);
+    }
+
+    private static void installRelativeProxy(
+        ModelBiped target,
+        ModelBiped source,
+        String[] sourcePartNames,
+        String[] targetPartNames,
+        float neutralPivotX,
+        float neutralPivotY,
+        float neutralPivotZ,
+        float parentScaleX,
+        float parentScaleY,
+        float parentScaleZ,
+        float parentTranslateX,
+        float parentTranslateY,
+        float parentTranslateZ) {
+        ModelRenderer current = getPart(target, targetPartNames);
+        if (current == null) {
+            return;
+        }
+
+        if (current instanceof RelativeTransformModelRenderer) {
+            ((RelativeTransformModelRenderer) current).setSource(source);
+            return;
+        }
+
+        set(target, targetPartNames, new RelativeTransformModelRenderer(
+            target,
+            source,
+            sourcePartNames,
+            current,
+            neutralPivotX,
+            neutralPivotY,
+            neutralPivotZ,
+            parentScaleX,
+            parentScaleY,
+            parentScaleZ,
+            parentTranslateX,
+            parentTranslateY,
+            parentTranslateZ));
+    }
+
+    private static boolean prepareRelativeModel(ModelBiped target, ModelBiped source) {
+        String className = target.getClass().getName();
+        if (MARICULTURE_FLIPPERS.equals(className)) {
+            installRelativeProxy(target, source, BIPED_RIGHT_LEG, "RFlipper", -2.0F, 20.0F, 0.0F);
+            installRelativeProxy(target, source, BIPED_RIGHT_LEG, "RBase", -2.0F, 20.0F, 0.0F);
+            installRelativeProxy(target, source, BIPED_LEFT_LEG, "LFlipper", 2.0F, 20.0F, 0.0F);
+            installRelativeProxy(target, source, BIPED_LEFT_LEG, "LBase", 2.0F, 20.0F, 0.0F);
+            return true;
+        }
+
+        if (ARS_MAGICA_EARTH_ARMOR.equals(className)) {
+            installRelativeProxy(
+                target, source, BIPED_BODY, BIPED_BODY, 0.0F, 0.0F, 0.0F,
+                1.4F, 1.3F, 0.8F, 0.0F, -0.01F, 0.0F);
+            installRelativeProxy(
+                target, source, BIPED_RIGHT_ARM, BIPED_RIGHT_ARM, -5.0F, 2.0F, 0.0F,
+                1.4F, 1.3F, 1.4F, 0.0F, 0.0F, 0.0F);
+            installRelativeProxy(
+                target, source, BIPED_LEFT_ARM, BIPED_LEFT_ARM, 5.0F, 2.0F, 0.0F,
+                1.4F, 1.3F, 1.4F, 0.0F, 0.0F, 0.0F);
+            installRelativeProxy(target, source, BIPED_BODY, "Shoulders", 0.0F, 0.0F, 0.0F);
+            installRelativeProxy(target, source, BIPED_LEFT_ARM, "LeftShoulder1", 5.0F, 2.0F, 0.0F);
+            installRelativeProxy(target, source, BIPED_LEFT_ARM, "LeftShoulder2", 5.0F, 2.0F, 0.0F);
+            installRelativeProxy(target, source, BIPED_RIGHT_ARM, "RightShoulder1", -5.0F, 2.0F, 0.0F);
+            installRelativeProxy(target, source, BIPED_RIGHT_ARM, "RightShoulder2", -5.0F, 2.0F, 0.0F);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static boolean restoreRelativeModel(ModelBiped target) {
+        String className = target.getClass().getName();
+        if (MARICULTURE_FLIPPERS.equals(className)) {
+            restoreProxy(target, new String[] {"RFlipper"});
+            restoreProxy(target, new String[] {"RBase"});
+            restoreProxy(target, new String[] {"LFlipper"});
+            restoreProxy(target, new String[] {"LBase"});
+            return true;
+        }
+
+        if (ARS_MAGICA_EARTH_ARMOR.equals(className)) {
+            restoreProxy(target, BIPED_BODY);
+            restoreProxy(target, BIPED_RIGHT_ARM);
+            restoreProxy(target, BIPED_LEFT_ARM);
+            restoreProxy(target, new String[] {"Shoulders"});
+            restoreProxy(target, new String[] {"LeftShoulder1"});
+            restoreProxy(target, new String[] {"LeftShoulder2"});
+            restoreProxy(target, new String[] {"RightShoulder1"});
+            restoreProxy(target, new String[] {"RightShoulder2"});
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void prepareNestedModels(ModelBiped target, ModelBiped source) {
+        if (!AVARITIA_INFINITY_ARMOR.equals(target.getClass().getName())) {
+            return;
+        }
+
+        prepareNestedModel(target, source, "overlay");
+        prepareNestedModel(target, source, "invulnOverlay");
+    }
+
+    private static void prepareNestedModel(ModelBiped target, ModelBiped source, String fieldName) {
+        Object value = get(target, new String[] {fieldName});
+        if (value instanceof ModelBiped) {
+            prepare((ModelBiped) value, source);
+        }
+    }
+
+    private static void restoreNestedModels(ModelBiped target) {
+        if (!AVARITIA_INFINITY_ARMOR.equals(target.getClass().getName())) {
+            return;
+        }
+
+        restoreNestedModel(target, "overlay");
+        restoreNestedModel(target, "invulnOverlay");
+    }
+
+    private static void restoreNestedModel(ModelBiped target, String fieldName) {
+        Object value = get(target, new String[] {fieldName});
+        if (value instanceof ModelBiped) {
+            restore((ModelBiped) value);
+        }
+    }
+
     private static void installAllDeclaredPartFields(
         ModelBiped target,
         ModelBiped source,
@@ -292,6 +478,8 @@ public final class ArmorModelSynchronizer {
             set(target, partNames, ((SyncingModelRenderer) current).getOriginal());
         } else if (current instanceof FixedTransformModelRenderer) {
             set(target, partNames, ((FixedTransformModelRenderer) current).getOriginal());
+        } else if (current instanceof RelativeTransformModelRenderer) {
+            set(target, partNames, ((RelativeTransformModelRenderer) current).getOriginal());
         }
     }
 
@@ -336,12 +524,7 @@ public final class ArmorModelSynchronizer {
     }
 
     private static void resetVanillaState(ModelBiped target) {
-        target.heldItemLeft = 0;
-        target.heldItemRight = 0;
-        target.isSneak = false;
-        target.aimedBow = false;
-        target.isRiding = false;
-        target.onGround = 0.0F;
+        resetModelState(target);
 
         resetPart(target.bipedHead, 0.0F, 0.0F, 0.0F);
         resetPart(target.bipedHeadwear, 0.0F, 0.0F, 0.0F);
@@ -350,6 +533,15 @@ public final class ArmorModelSynchronizer {
         resetPart(target.bipedLeftArm, 5.0F, 2.0F, 0.0F);
         resetPart(target.bipedRightLeg, -2.0F, 12.0F, 0.0F);
         resetPart(target.bipedLeftLeg, 2.0F, 12.0F, 0.0F);
+    }
+
+    private static void resetModelState(ModelBiped target) {
+        target.heldItemLeft = 0;
+        target.heldItemRight = 0;
+        target.isSneak = false;
+        target.aimedBow = false;
+        target.isRiding = false;
+        target.onGround = 0.0F;
     }
 
     private static void resetPart(ModelRenderer renderer, float rotationPointX, float rotationPointY, float rotationPointZ) {
